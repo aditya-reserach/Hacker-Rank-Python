@@ -37,29 +37,33 @@ Harry
 
 # Approch 1
 
+# This line ensures that the code below runs only when the script is executed directly,
+# not when it is imported as a module in another script.
 if __name__ == '__main__':
-    # List to store student data in the format: [name, score]
-    students = []
 
-    # Reading the number of students
-    n = int(input("Enter number of students: "))
+    # Initialize an empty list to store student records (each as [name, score])
+    student = []
 
-    # Collecting student names and scores
-    for _ in range(n):
-        name = input()
-        score = float(input())
-        students.append([name, score])
+    # Loop to take input for the given number of students
+    for _ in range(int(input())):
+        name = input()              # Take the student's name as input
+        score = float(input())      # Take the student's score as a float
+        student.append([name,score])  # Append the [name, score] pair to the student list
 
-    # Extracting all unique scores and sorting them to find the second lowest
-    unique_scores = sorted(set(score for _, score in students))
-    second_lowest = unique_scores[1]
+    # Create a sorted list of unique scores using set and sorted
+    # This removes duplicates and sorts the scores in ascending order
+    scores = sorted(set(s[1] for s in student))
 
-    # Finding all students with the second lowest score
-    second_lowest_students = [name for name, score in students if score == second_lowest]
-
-    # Printing names in alphabetical order
-    for name in sorted(second_lowest_students):
+    # Get the second lowest score (at index 1 of the sorted list)
+    second_lowest = scores[1]
+    
+    # Create a list of names of students who have the second lowest score
+    result = [s[0] for s in student if s[1] == second_lowest]
+    
+    # Sort the names alphabetically and print each on a new line
+    for name in sorted(result):
         print(name)
+
 
 
 
