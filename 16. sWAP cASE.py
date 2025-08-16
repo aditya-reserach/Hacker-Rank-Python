@@ -1,102 +1,96 @@
 """
-=====================================================
-Problem: Swap Case
-=====================================================
-
+Problem Statement:
+------------------
 You are given a string and your task is to swap cases. 
 In other words, convert all lowercase letters to uppercase 
 letters and vice versa.
 
------------------------------------------------------
-Example:
------------------------------------------------------
-Input:  Www.HackerRank.com
-Output: wWW.hACKERrANK.COM
+For Example:
+------------
+Www.HackerRank.com → wWW.hACKERrANK.COM
+Pythonist 2       → pYTHONIST 2  
 
-Input:  Pythonist 2
-Output: pYTHONIST 2
-
------------------------------------------------------
 Function Description:
------------------------------------------------------
-Complete the function swap_case(s):
+---------------------
+Complete the swap_case function.
 
-Parameters:
-    string s: the string to modify
+swap_case has the following parameters:
+- string s: the string to modify
 
 Returns:
-    string: the modified string
+--------
+string: the modified string
 
------------------------------------------------------
 Input Format:
------------------------------------------------------
-A single line containing a string s.
+-------------
+A single line containing a string.
 
------------------------------------------------------
 Constraints:
-- String length <= 1000
-- Characters may include letters, digits, spaces, and symbols
+------------
+- Only ASCII A-Z and a-z are considered letters.
+- Other characters (digits, symbols, spaces) remain unchanged.
 
------------------------------------------------------
 Sample Input 0:
------------------------------------------------------
+---------------
 HackerRank.com presents "Pythonist 2".
 
------------------------------------------------------
 Sample Output 0:
------------------------------------------------------
+----------------
 hACKERrANK.COM PRESENTS "pYTHONIST 2".
-=====================================================
 """
 
-# =====================================================
-# APPROACH 1: Using built-in function swapcase()
-# =====================================================
-def swap_case_with_builtin(s: str) -> str:
+# ------------------------------------------------------------
+# Approach 1: Using Python's built-in swapcase()
+# ------------------------------------------------------------
+def swap_case_builtin(s: str) -> str:
     """
-    Uses Python's built-in str.swapcase() method
-    which automatically flips the case of all letters.
+    Use Python's built-in str.swapcase() function.
     
-    Time Complexity: O(n), where n = length of string
-    Space Complexity: O(n), new string is created
+    Time Complexity: O(n)  (n = length of string)
+    Space Complexity: O(n) (new string created)
     """
     return s.swapcase()
 
 
-# =====================================================
-# APPROACH 2: Manual implementation (without built-in)
-# =====================================================
+# ------------------------------------------------------------
+# Approach 2: Manual Implementation (No Prebuilt Functions)
+# ------------------------------------------------------------
 def swap_case_manual(s: str) -> str:
     """
-    Manually swap cases by iterating over characters:
-    - If char is lowercase, convert to uppercase
-    - If char is uppercase, convert to lowercase
-    - Else (digits, spaces, symbols), keep unchanged
-    
-    Time Complexity: O(n), where n = length of string
-    Space Complexity: O(n), result string is created
+    Manually swap cases without using str.swapcase(), lower(), upper(), 
+    islower(), isupper(), etc.
+
+    Logic:
+    - 'a'..'z' → 'A'..'Z'  (subtract 32 in ASCII)
+    - 'A'..'Z' → 'a'..'z'  (add 32 in ASCII)
+    - Others unchanged
+
+    Time Complexity: O(n)  (looping through all characters once)
+    Space Complexity: O(n) (new list/string built)
     """
-    result = ""  # empty string to build output
-    
-    for char in s:  # iterate through each character
-        if char.islower():        # if character is lowercase
-            result += char.upper()
-        elif char.isupper():      # if character is uppercase
-            result += char.lower()
-        else:                     # if it's a number/symbol/space
-            result += char
-    
-    return result
+    result = []  # build output in a list for efficiency
+    for ch in s:
+        # if lowercase
+        if 'a' <= ch <= 'z':
+            result.append(chr(ord(ch) - 32))
+        # if uppercase
+        elif 'A' <= ch <= 'Z':
+            result.append(chr(ord(ch) + 32))
+        else:
+            result.append(ch)  # keep unchanged (digits, spaces, symbols)
+    return ''.join(result)
 
 
-# =====================================================
-# MAIN DRIVER CODE
-# =====================================================
+# ------------------------------------------------------------
+# Main execution
+# ------------------------------------------------------------
 if __name__ == "__main__":
-    s = input().strip()  # read input string
+    s = input().strip()   # read input string
     
-    # Option 1: Using built-in
-    # print(swap_case_with_builtin(s))
+    # Uncomment one of the below lines depending on which approach you want
     
-    # Option 2: Manual (without built-in)
+    # Approach 1: Using built-in function
+    # print(swap_case_builtin(s))
+    
+    # Approach 2: Manual ASCII conversion (no prebuilt methods)
     print(swap_case_manual(s))
