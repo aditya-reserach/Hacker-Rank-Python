@@ -1,141 +1,139 @@
 """
-==============================
-Problem Statement
-==============================
+Problem Statement:
+-------------------
 You are given two integers n and m.
+- The next n lines contain words (Group A).
+- The following m lines contain words (Group B).
 
-- First, you will input n words (Group A).
-- Then, you will input m words (Group B).
-
-For each word in Group B, you must print the positions (indices) where that word appeared in Group A.
-If the word does not appear in Group A, print -1.
+For each word in Group B:
+    - If the word exists in Group A, print all the positions (1-based index) where it appeared in Group A.
+    - If the word does not exist in Group A, print -1.
 
 Example:
----------
+--------
 Input:
 5 2
 a
 b
 a
-c
 a
+b
 a
-d
+b
 
 Output:
-1 3 5
--1
+1 3 4
+2 5
 
 Explanation:
--------------
-- Group A = ["a", "b", "a", "c", "a"]
-- Group B = ["a", "d"]
-
-For "a" → appears at positions [1, 3, 5].
-For "d" → does not appear → print -1.
+- Group A words = ["a", "b", "a", "a", "b"]
+- Group B words = ["a", "b"]
+Word "a" occurs at positions 1, 3, 4 → print "1 3 4"
+Word "b" occurs at positions 2, 5 → print "2 5"
 """
 
+# -----------------------------
+# CODE 1: Using defaultdict (prebuilt function)
+# -----------------------------
 
-# ========================================================
-# CODE 1: Using collections.defaultdict (Prebuilt Function)
-# ========================================================
-from collections import defaultdict
+from collections import defaultdict  # Importing defaultdict from collections
 
-if __name__ == "__main__":
-    # Read n and m from input
+if __name__ == '__main__':  # Ensures code only runs when executed directly
+    A = defaultdict(list)  # Create a dictionary where each key has a default empty list
+
+    # Read n (words in Group A) and m (words in Group B)
     n, m = map(int, input().split())
 
-    # Create defaultdict with list as default type
-    # This allows appending without checking if key exists
-    A = defaultdict(list)
-
-    # Loop from 1 to n+m (1-indexed as per problem statement)
+    # Loop through total n+m inputs
     for i in range(1, n + m + 1):
-        word = input().strip()  # Read each word
+        word = input()  # Read word input
 
-        if i <= n:
-            # First n words → belongs to Group A
-            # Store the index where the word appeared
-            A[word].append(i)
+        if i <= n:  
+            # First n inputs belong to Group A
+            # Append the index of the word into dictionary
+            A[word].append(i)  
+
+        elif word in A.keys():
+            # If word is in Group A, print all its stored positions
+            print(*A[word])  
+
         else:
-            # Remaining m words → belongs to Group B
-            if word in A:  # If word exists in Group A
-                print(*A[word])  # Print all indices
-            else:
-                print(-1)  # Word not found
+            # If word not found in Group A, print -1
+            print(-1)
 
 
-"""
-==============================
-Time Complexity (Code 1)
-==============================
-- Reading n + m words → O(n + m).
-- Storing Group A (n words) → Each insertion into defaultdict list is O(1).
-  Total = O(n).
-- Querying Group B (m words):
-    - Lookup in dictionary (hashmap) → O(1) average.
-    - Printing indices → O(k), where k = occurrences of word.
-  Total = O(m + total output size).
-Overall Time Complexity: O(n + m + total_output).
+# -----------------------------
+# CODE 2: Without defaultdict (manual dictionary)
+# -----------------------------
 
-==============================
-Space Complexity (Code 1)
-==============================
-- Dictionary stores n keys (unique words at most) with lists.
-- Worst case → each of n words is unique → O(n).
-- Extra input storage negligible.
-Overall Space Complexity: O(n).
-"""
+if __name__ == "__main__":  # Ensures code only runs when executed directly
+    n, m = map(int, input().split())  # Read n and m
 
+    A = {}  # Create a normal dictionary
 
-# ========================================================
-# CODE 2: Without Prebuilt Function (Manual Dictionary)
-# ========================================================
-if __name__ == "__main__":
-    # Read n and m from input
-    n, m = map(int, input().split())
-
-    # Normal dictionary for storing Group A word positions
-    A = {}
-
-    # Loop through n+m words
+    # Loop through n+m inputs
     for i in range(1, n + m + 1):
-        word = input().strip()
+        word = input().strip()  # Read word input (strip removes extra spaces)
 
         if i <= n:
-            # First n words → Group A
-            # If word not in dictionary, create an empty list
+            # First n inputs are for Group A
+
+            # If the word is not yet in dictionary, create an empty list
             if word not in A:
                 A[word] = []
-            # Append current index
-            A[word].append(i)
+            
+            # Append the index position of word
+            A[word].append(i)  
+
         else:
-            # Group B words
-            if word in A:  # If word exists in Group A
-                print(*A[word])  # Print indices
+            # Now handling Group B queries
+            if word in A:
+                # If word exists, print all stored positions
+                print(*A[word]) 
             else:
-                print(-1)  # Not found
+                # If not found, print -1
+                print(-1)
 
 
 """
-==============================
-Time Complexity (Code 2)
-==============================
-- Reading n + m words → O(n + m).
-- Storing Group A (n words):
-    - Each dictionary insertion/search is O(1) average.
-    - Total = O(n).
-- Querying Group B (m words):
-    - Lookup O(1) average per query.
-    - Printing indices O(k).
-    - Total = O(m + total output size).
-Overall Time Complexity: O(n + m + total_output).
+-------------------------------------
+Time Complexity Analysis:
+-------------------------------------
 
-==============================
-Space Complexity (Code 2)
-==============================
-- Dictionary stores up to n unique words with lists of indices.
-- Worst case space = O(n).
-- No extra library overhead.
-Overall Space Complexity: O(n).
+Let:
+- n = number of words in Group A
+- m = number of queries in Group B
+
+1. Building dictionary (first n inputs):
+   - For each word, insertion into dictionary/list = O(1) average
+   - Total = O(n)
+
+2. Processing m queries (next m inputs):
+   - Each query checks membership in dictionary = O(1) average
+   - Printing positions takes O(k), where k = number of occurrences of word
+   - Across all queries, total printing ≤ n (because each word position belongs to some query at most once)
+   - Total = O(m + n)
+
+➡ Overall Time Complexity = O(n + m)
+
+-------------------------------------
+Space Complexity Analysis:
+-------------------------------------
+- Dictionary stores all n words with their indices
+- Each index is stored exactly once
+- Extra memory for m queries (constant storage for word input)
+- Total = O(n)
+
+-------------------------------------
+How to think for complexity:
+-------------------------------------
+1. Identify input sizes → n (Group A) + m (Group B).
+2. Break problem into two parts:
+   - Dictionary building (depends on n).
+   - Query answering (depends on m).
+3. Consider cost of operations:
+   - Dictionary insertion = O(1).
+   - Lookup in dictionary = O(1).
+   - Printing = O(k), but total printing ≤ n.
+4. Combine → O(n + m) time, O(n) space.
 """
