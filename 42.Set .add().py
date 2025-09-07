@@ -1,24 +1,24 @@
 """
--------------------------------------------------------------
-Problem: "Introduction to Sets" (HackerRank Style)
+Problem: Stamp Collection (HackerRank Problem)
 
-TASK:
-You are given a sequence of country stamps (strings). Some country
-stamps may be repeated. Your task is to count the number of distinct
-countries from the input.
+You are given a number of country stamps collected by a person. Some stamps may be from the same country, 
+and duplicates should not be counted. You must find the total number of distinct country stamps.
 
-INPUT FORMAT:
-- The first line contains an integer n, the number of country stamps.
-- The next n lines each contain the name of one country stamp (a string).
+-------------------------------------------------------
+Input Format:
+- The first line contains an integer N, the number of country stamps.
+- The next N lines each contain the name of a country.
 
-OUTPUT FORMAT:
-- Print a single integer: the number of distinct country stamps.
+Output Format:
+- Output the total number of distinct country stamps.
 
-CONSTRAINTS:
-- 0 <= n <= 1000
-- Each country name is a string containing only letters (a–z, A–Z).
+-------------------------------------------------------
+Constraints:
+1 <= N <= 1000
+The country name consists of only English letters.
 
-EXAMPLE:
+-------------------------------------------------------
+Example:
 Input:
 7
 UK
@@ -33,99 +33,81 @@ Output:
 5
 
 Explanation:
-The unique countries are:
-UK, China, USA, France, NewZealand → total count = 5.
-
--------------------------------------------------------------
-Below are TWO SOLUTIONS:
-
-1) Solution using Python's built-in "set" data structure.
-   (Efficient: O(n) average time complexity)
-
-2) Solution WITHOUT using prebuilt set/dictionary functions.
-   (Manual uniqueness tracking using a list. Less efficient: O(n^2))
-
-Each line of code is commented in detail.
--------------------------------------------------------------
+- The unique countries are {UK, China, USA, France, NewZealand}
+- Hence, answer = 5
 """
 
+# -------------------------------------------------------
+# 🔹 Solution 1: Using Python's built-in set() (Best + Efficient)
+# -------------------------------------------------------
 
-# -------------------------------------------------------------
-# SOLUTION 1: Using Python's built-in "set"
-# -------------------------------------------------------------
+# Step 1: Read the total number of country stamps
+n = int(input().strip())  # O(1) operation
 
-# Read the number of country stamps
-n = int(input().strip())  # .strip() removes any extra spaces/newlines
+# Step 2: Use set comprehension to store countries
+# - A set automatically ignores duplicates
+# - We read n times and add to the set
+unique_countries = {input().strip() for _ in range(n)}  # O(n) average time
 
-# Initialize an empty set to hold unique country names
-country_set = set()
-
-# Loop over n times to read each country
-for _ in range(n):
-    country = input().strip()  # Read a country name
-    country_set.add(country)   # Add it to the set (duplicates ignored automatically)
-
-# Finally, print the size of the set → number of unique countries
-print(len(country_set))
+# Step 3: Output the total number of unique countries
+print(len(unique_countries))  # O(1)
 
 """
-TIME COMPLEXITY (Solution 1):
-- Insertion into a set is O(1) on average (due to hashing).
-- We do this n times → O(n).
-- Final len() is O(1).
-Total Time = O(n)
+✅ Time Complexity (Solution 1):
+- Reading N inputs → O(n)
+- Insertion into set → O(1) average per element (hashing)
+- Total → O(n)
 
-SPACE COMPLEXITY (Solution 1):
-- We store at most n unique countries in the set.
-- Space = O(n).
+✅ Space Complexity (Solution 1):
+- We store only unique countries in a set → O(n)
+- Hence, space = O(n)
 """
 
+# -------------------------------------------------------
+# 🔹 Solution 2: Without using prebuilt set() (Manual Implementation)
+# -------------------------------------------------------
 
+# Step 1: Read the total number of country stamps
+m = int(input().strip())  # O(1)
 
-# -------------------------------------------------------------
-# SOLUTION 2: WITHOUT using prebuilt "set"
-# (Manual uniqueness tracking with a list)
-# -------------------------------------------------------------
+# Step 2: Create an empty list to track unique countries manually
+unique_country_list = []  # Initially empty → O(1)
 
-# Read the number of country stamps again
-n = int(input().strip())
-
-# Initialize an empty list to hold only unique country names
-unique_countries = []
-
-# Loop over n times to read each country
-for _ in range(n):
-    country = input().strip()  # Read a country name
+# Step 3: Loop over each input country
+for _ in range(m):  # Runs m times → O(m)
+    country = input().strip()  # Read one country name
     
-    # Flag variable to check if this country already exists
-    is_present = False
+    # Flag to check if the country already exists
+    is_present = False  # O(1)
     
-    # Manually check if the country is already in unique_countries
-    for c in unique_countries:   # Iterate through all stored unique entries
-        if c == country:         # If we find a match
-            is_present = True    # Mark as present
-            break                # Stop checking further
+    # Check manually if the country is already stored
+    # This requires scanning the entire list in worst case
+    for c in unique_country_list:  # O(k), where k is current unique count
+        if c == country:  # Comparison O(1)
+            is_present = True
+            break  # Exit once found
     
-    # If not present, add to the list
+    # If not found, add to our manual "unique list"
     if not is_present:
-        unique_countries.append(country)
+        unique_country_list.append(country)  # O(1)
 
-# Finally, print the size of the unique_countries list
-print(len(unique_countries))
+# Step 4: Output the total number of unique countries
+print(len(unique_country_list))  # O(1)
 
 """
-TIME COMPLEXITY (Solution 2):
-- For each of the n inputs, we may scan the list of unique_countries.
-- In the worst case, unique_countries length = n, so scanning takes O(n).
-- Therefore, worst-case time = O(n^2).
-- Final len() is O(1).
-Total Time = O(n^2)
+✅ Time Complexity (Solution 2):
+- Reading M inputs → O(m)
+- Checking duplicates manually → Worst case O(m) for each input
+- Total worst-case → O(m²)
 
-SPACE COMPLEXITY (Solution 2):
-- We store at most n unique countries in the list.
-- Space = O(n).
+✅ Space Complexity (Solution 2):
+- We store only unique countries in a list → O(m)
+- Hence, space = O(m)
 """
 
-# -------------------------------------------------------------
-# END OF FILE
-# -------------------------------------------------------------
+# -------------------------------------------------------
+# 📌 Final Notes:
+# - Solution 1 is much faster and recommended in real-world coding (O(n)).
+# - Solution 2 demonstrates the manual approach without using prebuilt set() 
+#   but is slower (O(n²)).
+# -------------------------------------------------------
