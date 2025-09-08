@@ -59,7 +59,7 @@ for _ in range(N):
     
     # Use Python built-in: issuperset() checks if all elements of other_set are in A
     # Also check A != other_set to ensure "strict" (A must have something extra)
-    if not (A.issuperset(other_set) and A != other_set):
+    if not (A.issuperset(other_set)):
         result = False  # If one set fails, mark result False
         break           # Stop checking further, no need to continue
 
